@@ -10,6 +10,9 @@ import {
 } from './definitions';
 import { formatCurrency } from './utils';
 import { unstable_noStore as noStore } from 'next/cache';
+import { HearthstoneCard as HearthstoneCardType } from '../types/index';
+
+import axios from 'axios';
 
 export async function fetchRevenue() {
   // Add noStore() here to prevent the response from being cached.
@@ -236,3 +239,23 @@ export async function getUser(email: string) {
     throw new Error('Failed to fetch user.');
   }
 }
+
+export const fetchHearthstoneCards = async (): Promise<HearthstoneCardType[]> => {
+  const options = {
+    method: 'GET',
+    url: 'https://omgvamp-hearthstone-v1.p.rapidapi.com/cards/sets/Battlegrounds',
+    params: { locale: 'enUS' },
+    headers: {
+      'X-RapidAPI-Key': process.env.NEXT_PUBLIC_RAPIDAPI_KEY, // Assuming you're storing your API key in .env.local
+      'X-RapidAPI-Host': 'omgvamp-hearthstone-v1.p.rapidapi.com',
+    },
+  };
+
+  try {
+    const response = await axios.request<HearthstoneCardType[]>(options);
+    return response.data; // Returns the fetched data
+  } catch (error) {
+    console.error(error);
+    throw new Error('Failed to fetch Hearthstone cards');
+  }
+};
