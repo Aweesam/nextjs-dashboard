@@ -240,22 +240,23 @@ export async function getUser(email: string) {
   }
 }
 
-export const fetchHearthstoneCards = async (): Promise<HearthstoneCardType[]> => {
-  const options = {
-    method: 'GET',
-    url: 'https://omgvamp-hearthstone-v1.p.rapidapi.com/cards/sets/Battlegrounds',
-    params: { locale: 'enUS' },
-    headers: {
-      'X-RapidAPI-Key': process.env.NEXT_PUBLIC_RAPIDAPI_KEY, // Assuming you're storing your API key in .env.local
-      'X-RapidAPI-Host': 'omgvamp-hearthstone-v1.p.rapidapi.com',
-    },
-  };
-
+export async function fetchHearthstoneCards() {
   try {
-    const response = await axios.request<HearthstoneCardType[]>(options);
-    return response.data; // Returns the fetched data
-  } catch (error) {
-    console.error(error);
-    throw new Error('Failed to fetch Hearthstone cards');
+    const axios = require('axios');
+    const options = {
+      
+        method: 'GET',
+        url: 'https://omgvamp-hearthstone-v1.p.rapidapi.com/cards/sets/%7BBattleGrounds%7D',
+        params: {locale: 'enUS'},
+        headers: {
+          'X-RapidAPI-Key': process.env.NEXT_PUBLIC_RAPIDAPI_KEY, // Assuming you're storing your API key in .env.local
+          'X-RapidAPI-Host': 'omgvamp-hearthstone-v1.p.rapidapi.com'
+        },
+      }
+    const res = await axios.request(options);
+    console.log(res);
+    return res.data;
+  } catch (err) {
+    console.log(err);
   }
 };
