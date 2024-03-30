@@ -236,3 +236,41 @@ export async function getUser(email: string) {
     throw new Error('Failed to fetch user.');
   }
 }
+
+export async function getBlizzardAuthToken() {
+  const response = await fetch('https://oauth.battle.net/token', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: new URLSearchParams({
+      grant_type: 'client_credentials',
+      client_id: 'a699ddd658ae4cc787e8f1caf38ae1a4',
+      client_secret: 'yAFe60BetjYDV9EjpMd5w270qJxFHi96',
+    }),
+  });
+
+  const data = await response.json();
+  return data.access_token;
+}
+
+export async function fetchHearthstoneBattlegroundsCards(token: string) {
+  const response = await fetch('https://us.api.blizzard.com/hearthstone/cards?locale=en_US&gameMode=battlegrounds&tier=1', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const data = await response.json();
+  return data; // Adjust this based on the actual structure of Blizzard's response
+}
+
+export async function fetchV1LatestCards() {
+  const response = await fetch('https://api.hearthstonejson.com/v1/latest/enUS/cards.json' , {
+
+    
+  });
+
+  const data = await response.json();
+  return data;
+}
